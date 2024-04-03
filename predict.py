@@ -4,6 +4,7 @@ import os
 import torch
 from diffusers import StableDiffusionXLPipeline
 from PIL import Image
+from rembg import new_session, remove
 
 from imageprocessor import VaeImageProcessor
 from lib_layerdiffusion.models import TransparentVAEDecoder
@@ -91,3 +92,9 @@ images[0].save("out_intermediate.png")
 
 # final output after transparent vae decode
 Image.fromarray(vae_po.extra_result_images[0]).convert("RGBA").save("out_final.png")
+
+# since intermediate output is a transparent tiled RGB output we can use rembg to
+# remove the background in case where transparent vae decoder fails
+session = new_session("isnet-general-use")  # proves to better model
+rmbg = remove(images[0], session=session)
+rmbg.save("out_rmbg.png")

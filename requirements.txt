@@ -31,3 +31,4 @@ torchsde
 transformers==4.30.2
 diffusers==0.26.3
 xformers
+rembg
